@@ -1,0 +1,7 @@
+:root {
+  --ak-color-primary: #1D4ED8;
+  --ak-color-text: #111827;
+  --ak-color-success: #15803D;
+  --ak-color-danger: #B91C1C;
+  --ak-focus-ring: 0 0 0 2px #FFFFFF, 0 0 0 4px #1D4ED8;
+}
