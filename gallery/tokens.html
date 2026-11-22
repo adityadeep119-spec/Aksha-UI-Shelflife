@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aksha UI — Design Tokens</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap-grid.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/ds/tokens.css" />
+    <link rel="stylesheet" href="/ds/components.css" />
+  </head>
+  <body>
+    <a href="#main-content" class="ak-skip-link">Skip to main content</a>
+
+    <header
+      class="container py-4 border-bottom mb-4 d-flex justify-content-between align-items-center flex-wrap gap-2"
+    >
+      <div>
+        <h1 style="margin: 0; font-size: var(--ak-font-size-h2)">
+          Aksha UI Design Tokens
+        </h1>
+        <p style="margin: 0; color: var(--ak-color-text-muted)">
+          Contrast-verified colour swatches, spacing scale, type scale, and
+          focus ring
+        </p>
+      </div>
+      <nav aria-label="Gallery Navigation" class="d-flex gap-2">
+        <a href="/gallery/index.html" class="ak-button secondary"
+          >Gallery Home</a
+        >
+        <a
+          href="/gallery/tokens.html"
+          class="ak-button primary"
+          aria-current="page"
+          >Design Tokens</a
+        >
+        <a href="/gallery/components.html" class="ak-button secondary"
+          >10 Components</a
+        >
+        <a href="/app/index.html" class="ak-button secondary"
+          >Launch ShelfLife App →</a
+        >
+      </nav>
+    </header>
+
+    <main id="main-content" class="container pb-5">
+      <h2>1. Colour Palette & WCAG Contrast Ratios (PRD Section 13)</h2>
+      <table class="ak-table mb-5">
+        <caption>
+          Verified contrast pairs meeting WCAG 2.1 Level AA
+        </caption>
+        <thead>
+          <tr>
+            <th scope="col">Token Name</th>
+            <th scope="col">Preview</th>
+            <th scope="col">Hex Value</th>
+            <th scope="col">Contrast Ratio</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td data-label="Token"><code>--ak-color-primary</code></td>
+            <td data-label="Preview">
+              <span
+                style="
+                  display: inline-block;
+                  padding: 4px 12px;
+                  background: #1d4ed8;
+                  color: #fff;
+                  border-radius: 4px;
+                "
+                >Primary on White</span
+              >
+            </td>
+            <td data-label="Hex">#1D4ED8 / #FFFFFF</td>
+            <td data-label="Contrast">
+              <span class="ak-badge success">6.7:1 (AA Pass)</span>
+            </td>
+          </tr>
+          <tr>
+            <td data-label="Token"><code>--ak-color-text</code></td>
+            <td data-label="Preview">
+              <span
+                style="
+                  display: inline-block;
+                  padding: 4px 12px;
+                  background: #ffffff;
+                  color: #111827;
+                  border: 1px solid #d1d5db;
+                  border-radius: 4px;
+                "
+                >Body Text</span
+              >
+            </td>
+            <td data-label="Hex">#111827 / #FFFFFF</td>
+            <td data-label="Contrast">
+              <span class="ak-badge success">17.7:1 (AAA Pass)</span>
+            </td>
+          </tr>
+          <tr>
+            <td data-label="Token"><code>--ak-color-text-muted</code></td>
+            <td data-label="Preview">
+              <span
+                style="
+                  display: inline-block;
+                  padding: 4px 12px;
+                  background: #ffffff;
+                  color: #4b5563;
+                  border: 1px solid #d1d5db;
+                  border-radius: 4px;
+                "
+                >Muted Text</span
+              >
+            </td>
+            <td data-label="Hex">#4B5563 / #FFFFFF</td>
+            <td data-label="Contrast">
+              <span class="ak-badge success">7.6:1 (AAA Pass)</span>
+            </td>
+          </tr>
+          <tr>
+            <td data-label="Token"><code>--ak-color-success-text</code></td>
+            <td data-label="Preview">
+              <span class="ak-badge success">Success Badge</span>
+            </td>
+            <td data-label="Hex">#166534 on #DCFCE7</td>
+            <td data-label="Contrast">
+              <span class="ak-badge success">6.5:1 (AA Pass)</span>
+            </td>
+          </tr>
+          <tr>
+            <td data-label="Token"><code>--ak-color-warning-text</code></td>
+            <td data-label="Preview">
+              <span class="ak-badge warning">Warning Badge</span>
+            </td>
+            <td data-label="Hex">#854D0E on #FEF9C3</td>
+            <td data-label="Contrast">
+              <span class="ak-badge success">6.4:1 (AA Pass)</span>
+            </td>
+          </tr>
+          <tr>
+            <td data-label="Token"><code>--ak-color-danger-text</code></td>
+            <td data-label="Preview">
+              <span class="ak-badge danger">Danger Badge</span>
+            </td>
+            <td data-label="Hex">#991B1B on #FEE2E2</td>
+            <td data-label="Contrast">
+              <span class="ak-badge success">6.8:1 (AA Pass)</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>2. Spacing Scale</h2>
+      <table class="ak-table mb-5">
+        <caption>
+          CSS Custom Properties for Spacing
+        </caption>
+        <thead>
+          <tr>
+            <th scope="col">Token</th>
+            <th scope="col">Value</th>
+            <th scope="col">Visual Bar</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td data-label="Token"><code>--ak-space-1</code></td>
+            <td data-label="Value">4px</td>
+            <td data-label="Visual">
+              <div
+                style="
+                  width: 4px;
+                  height: 16px;
+                  background: var(--ak-color-primary);
+                "
+              ></div>
+            </td>
+          </tr>
+          <tr>
+            <td data-label="Token"><code>--ak-space-2</code></td>
+            <td data-label="Value">8px</td>
+            <td data-label="Visual">
+              <div
+                style="
+                  width: 8px;
+                  height: 16px;
+                  background: var(--ak-color-primary);
+                "
+              ></div>
+            </td>
+          </tr>
+          <tr>
+            <td data-label="Token"><code>--ak-space-3</code></td>
+            <td data-label="Value">12px</td>
+            <td data-label="Visual">
+              <div
+                style="
+                  width: 12px;
+                  height: 16px;
+                  background: var(--ak-color-primary);
+                "
+              ></div>
+            </td>
+          </tr>
+          <tr>
+            <td data-label="Token"><code>--ak-space-4</code></td>
+            <td data-label="Value">16px</td>
+            <td data-label="Visual">
+              <div
+                style="
+                  width: 16px;
+                  height: 16px;
+                  background: var(--ak-color-primary);
+                "
+              ></div>
+            </td>
+          </tr>
+          <tr>
+            <td data-label="Token"><code>--ak-space-6</code></td>
+            <td data-label="Value">24px</td>
+            <td data-label="Visual">
+              <div
+                style="
+                  width: 24px;
+                  height: 16px;
+                  background: var(--ak-color-primary);
+                "
+              ></div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>3. Focus Ring & Typography</h2>
+      <div class="ak-card">
+        <h3>Double Ring Focus Token (<code>--ak-focus-ring</code>)</h3>
+        <p>
+          Value: <code>0 0 0 3px #FFFFFF, 0 0 0 5px #1D4ED8</code> (6.7:1
+          contrast against white; visible on both light and dark surfaces).
+        </p>
+        <p>
+          Press <strong>Tab</strong> to test focus visibility on this button:
+          <button class="ak-button primary">Focus Test Button</button>
+        </p>
+      </div>
+    </main>
+  </body>
+</html>

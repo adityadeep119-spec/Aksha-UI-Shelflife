@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aksha UI — Accessible Design System Gallery</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap-grid.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/ds/tokens.css" />
+    <link rel="stylesheet" href="/ds/components.css" />
+  </head>
+  <body>
+    <a href="#main-content" class="ak-skip-link">Skip to main content</a>
+
+    <header
+      class="container py-4 border-bottom mb-4 d-flex justify-content-between align-items-center flex-wrap gap-2"
+    >
+      <div>
+        <h1 style="margin: 0; font-size: var(--ak-font-size-h2)">
+          Aksha UI Design System
+        </h1>
+        <p style="margin: 0; color: var(--ak-color-text-muted)">
+          WCAG 2.1 AA Accessible Component Library (PST_PD_111)
+        </p>
+      </div>
+      <nav aria-label="Gallery Navigation" class="d-flex gap-2">
+        <a
+          href="/gallery/index.html"
+          class="ak-button primary"
+          aria-current="page"
+          >Gallery Home</a
+        >
+        <a href="/gallery/tokens.html" class="ak-button secondary"
+          >Design Tokens</a
+        >
+        <a href="/gallery/components.html" class="ak-button secondary"
+          >10 Components</a
+        >
+        <a href="/app/index.html" class="ak-button secondary"
+          >Launch ShelfLife App →</a
+        >
+      </nav>
+    </header>
+
+    <main id="main-content" class="container pb-5">
+      <section class="mb-5">
+        <h2>Accessibility Principles (POUR)</h2>
+        <div class="row g-3 mt-1">
+          <div class="col-12 col-md-6 col-lg-3">
+            <div class="ak-card">
+              <h3>1. Perceivable</h3>
+              <p>
+                All tokens meet WCAG AA contrast ratios (minimum 4.5:1 for body
+                text, 6.4:1+ on all badges). Status is never shown by colour
+                alone.
+              </p>
+            </div>
+          </div>
+          <div class="col-12 col-md-6 col-lg-3">
+            <div class="ak-card">
+              <h3>2. Operable</h3>
+              <p>
+                100% keyboard operable via Tab, Enter, Space, Escape, and Arrow
+                keys with a high-contrast double blue focus ring.
+              </p>
+            </div>
+          </div>
+          <div class="col-12 col-md-6 col-lg-3">
+            <div class="ak-card">
+              <h3>3. Understandable</h3>
+              <p>
+                Clear labels, hints, and inline error messages linked via
+                <code>aria-describedby</code> and announced to screen readers.
+              </p>
+            </div>
+          </div>
+          <div class="col-12 col-md-6 col-lg-3">
+            <div class="ak-card">
+              <h3>4. Robust</h3>
+              <p>
+                Semantic HTML5 first with WAI-ARIA Authoring Practices for
+                Dialogs, Tabs, Sortable Tables, and Live Regions.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>Component Inventory (10 Components)</h2>
+        <p>
+          Copy tested, accessible HTML snippets in under 30 seconds from the
+          <a href="/gallery/components.html">Components Documentation</a> page.
+        </p>
+        <div class="row g-3 mt-2">
+          <div class="col-12 col-md-4">
+            <div class="ak-card">
+              <h3>1. Button (<code>.ak-button</code>)</h3>
+              <p>
+                Primary, secondary, danger, disabled, and icon-labelled buttons.
+              </p>
+              <a
+                href="/gallery/components.html#comp-button"
+                class="ak-button secondary sm"
+                >View Docs</a
+              >
+            </div>
+          </div>
+          <div class="col-12 col-md-4">
+            <div class="ak-card">
+              <h3>2. TextField (<code>.ak-textfield</code>)</h3>
+              <p>
+                Accessible input with explicit label, hint, and error state.
+              </p>
+              <a
+                href="/gallery/components.html#comp-textfield"
+                class="ak-button secondary sm"
+                >View Docs</a
+              >
+            </div>
+          </div>
+          <div class="col-12 col-md-4">
+            <div class="ak-card">
+              <h3>3. Select (<code>.ak-select</code>)</h3>
+              <p>Native accessible dropdown menu with label binding.</p>
+              <a
+                href="/gallery/components.html#comp-select"
+                class="ak-button secondary sm"
+                >View Docs</a
+              >
+            </div>
+          </div>
+          <div class="col-12 col-md-4">
+            <div class="ak-card">
+              <h3>4. Checkbox (<code>.ak-checkbox</code>)</h3>
+              <p>Keyboard Space-toggleable checkbox with clickable label.</p>
+              <a
+                href="/gallery/components.html#comp-checkbox"
+                class="ak-button secondary sm"
+                >View Docs</a
+              >
+            </div>
+          </div>
+          <div class="col-12 col-md-4">
+            <div class="ak-card">
+              <h3>5. Badge (<code>.ak-badge</code>)</h3>
+              <p>
+                Text-first status indicators (Success, Warning, Danger, Info).
+              </p>
+              <a
+                href="/gallery/components.html#comp-badge"
+                class="ak-button secondary sm"
+                >View Docs</a
+              >
+            </div>
+          </div>
+          <div class="col-12 col-md-4">
+            <div class="ak-card">
+              <h3>6. Alert & Toast (<code>.ak-alert</code>)</h3>
+              <p>
+                Polite and assertive live regions for dynamic user feedback.
+              </p>
+              <a
+                href="/gallery/components.html#comp-alert"
+                class="ak-button secondary sm"
+                >View Docs</a
+              >
+            </div>
+          </div>
+          <div class="col-12 col-md-4">
+            <div class="ak-card">
+              <h3>7. Modal Dialog (<code>.ak-dialog</code>)</h3>
+              <p>
+                Focus-trapped modal with Escape close and focus restoration.
+              </p>
+              <a
+                href="/gallery/components.html#comp-dialog"
+                class="ak-button secondary sm"
+                >View Docs</a
+              >
+            </div>
+          </div>
+          <div class="col-12 col-md-4">
+            <div class="ak-card">
+              <h3>8. Card (<code>.ak-card</code>)</h3>
+              <p>Structured content container with semantic headings.</p>
+              <a
+                href="/gallery/components.html#comp-card"
+                class="ak-button secondary sm"
+                >View Docs</a
+              >
+            </div>
+          </div>
+          <div class="col-12 col-md-4">
+            <div class="ak-card">
+              <h3>9. Data Table (<code>.ak-table</code>)</h3>
+              <p>
+                Sortable table with <code>aria-sort</code> and mobile card
+                reflow.
+              </p>
+              <a
+                href="/gallery/components.html#comp-table"
+                class="ak-button secondary sm"
+                >View Docs</a
+              >
+            </div>
+          </div>
+          <div class="col-12 col-md-4">
+            <div class="ak-card">
+              <h3>10. Tabs (<code>.ak-tabs</code>)</h3>
+              <p>
+                Roving tabindex tablist with Left/Right/Home/End navigation.
+              </p>
+              <a
+                href="/gallery/components.html#comp-tabs"
+                class="ak-button secondary sm"
+                >View Docs</a
+              >
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

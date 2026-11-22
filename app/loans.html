@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ShelfLife — My Loans</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap-grid.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/ds/tokens.css" />
+    <link rel="stylesheet" href="/ds/components.css" />
+  </head>
+  <body>
+    <a href="#main-content" class="ak-skip-link">Skip to main content</a>
+    <header id="appHeader"></header>
+
+    <main id="main-content" class="container pb-5">
+      <h1 style="font-size: var(--ak-font-size-h1); margin-bottom: 16px">
+        My Loans
+      </h1>
+      <div id="overdueSummary"></div>
+
+      <div class="ak-tabs">
+        <div role="tablist" aria-label="My loan lists">
+          <button
+            role="tab"
+            aria-selected="true"
+            aria-controls="panel-current"
+            id="tab-current"
+            tabindex="0"
+          >
+            Current Loans
+          </button>
+          <button
+            role="tab"
+            aria-selected="false"
+            aria-controls="panel-history"
+            id="tab-history"
+            tabindex="-1"
+          >
+            Loan History
+          </button>
+        </div>
+
+        <div id="panel-current" role="tabpanel" aria-labelledby="tab-current">
+          <div id="currentLoansContainer"></div>
+        </div>
+
+        <div
+          id="panel-history"
+          role="tabpanel"
+          aria-labelledby="tab-history"
+          hidden
+        >
+          <div id="historyLoansContainer"></div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Confirm Return Dialog -->
+    <div
+      id="returnModal"
+      class="ak-dialog"
+      role="dialog"
+      aria-labelledby="returnModalTitle"
+      hidden
+    >
+      <h2 id="returnModalTitle" style="margin-top: 0">Return book?</h2>
+      <p id="returnModalText"></p>
+      <div class="d-flex gap-2 mt-4">
+        <button type="button" class="ak-button secondary" data-dialog-close>
+          Cancel
+        </button>
+        <button type="button" class="ak-button primary" id="confirmReturnBtn">
+          Confirm return
+        </button>
+      </div>
+    </div>
+
+    <script src="/ds/js/dialog.js"></script>
+    <script src="/ds/js/tabs.js"></script>
+    <script src="/ds/js/toast.js"></script>
+    <script src="/app/js/store.js"></script>
+    <script>
+      let loanToReturn = null;
+
+      function renderLoans() {
+        const session = getSession();
+        if (!session) {
+          document.getElementById("main-content").innerHTML =
+            `<div class="ak-alert warning">Please sign in as a Member on <a href="/app/index.html">Switch Role</a> to view your loans.</div>`;
+          return;
+        }
+
+        const books = getBooks();
+        const myLoans = getLoans().filter((l) => l.userId === session.userId);
+        const current = myLoans.filter((l) => !l.returnedOn);
+        const history = myLoans.filter((l) => l.returnedOn);
+
+        const overdueCount = current.filter(
+          (l) => getDueStatus(l.dueOn).isOverdue,
+        ).length;
+        document.getElementById("overdueSummary").innerHTML =
+          overdueCount > 0
+            ? `<div class="ak-alert danger" role="alert">${overdueCount} ${overdueCount === 1 ? "book is" : "books are"} overdue. Please return them as soon as possible.</div>`
+            : "";
+
+        const curBox = document.getElementById("currentLoansContainer");
+        if (current.length === 0) {
+          curBox.innerHTML = `<div class="ak-alert">You have no books on loan. <a href="/app/catalog.html">Browse the catalog.</a></div>`;
+        } else {
+          curBox.innerHTML = `
+          <table class="ak-table">
+            <caption>Active books currently checked out</caption>
+            <thead>
+              <tr>
+                <th scope="col">Title</th>
+                <th scope="col">Checked Out</th>
+                <th scope="col">Due Date</th>
+                <th scope="col">Status</th>
+                <th scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${current
+                .map((l) => {
+                  const book = books.find((b) => b.id === l.bookId) || {
+                    title: "Unknown",
+                  };
+                  const status = getDueStatus(l.dueOn);
+                  return `
+                  <tr>
+                    <td data-label="Title"><strong>${book.title}</strong></td>
+                    <td data-label="Checked Out">${formatDate(l.checkedOutOn)}</td>
+                    <td data-label="Due Date">${formatDate(l.dueOn)}</td>
+                    <td data-label="Status"><span class="ak-badge ${status.tone}">${status.text}</span></td>
+                    <td data-label="Actions" class="d-flex gap-2 flex-wrap">
+                      <button type="button" class="ak-button primary sm" onclick="askReturn('${l.id}', '${book.title.replace(/'/g, "\\'")}', this)">Return book</button>
+                      ${!l.renewed ? `<button type="button" class="ak-button secondary sm" onclick="renewLoan('${l.id}')">Renew (+7d)</button>` : ""}
+                    </td>
+                  </tr>
+                `;
+                })
+                .join("")}
+            </tbody>
+          </table>
+        `;
+        }
+
+        const histBox = document.getElementById("historyLoansContainer");
+        if (history.length === 0) {
+          histBox.innerHTML = `<div class="ak-alert">No returned books in your history yet.</div>`;
+        } else {
+          histBox.innerHTML = `
+          <table class="ak-table">
+            <caption>Previously returned books</caption>
+            <thead>
+              <tr>
+                <th scope="col">Title</th>
+                <th scope="col">Checked Out</th>
+                <th scope="col">Returned On</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${history
+                .map((l) => {
+                  const book = books.find((b) => b.id === l.bookId) || {
+                    title: "Unknown",
+                  };
+                  return `
+                  <tr>
+                    <td data-label="Title">${book.title}</td>
+                    <td data-label="Checked Out">${formatDate(l.checkedOutOn)}</td>
+                    <td data-label="Returned On">${formatDate(l.returnedOn)}</td>
+                  </tr>
+                `;
+                })
+                .join("")}
+            </tbody>
+          </table>
+        `;
+        }
+      }
+
+      function askReturn(loanId, title, triggerEl) {
+        loanToReturn = { id: loanId, title };
+        document.getElementById("returnModalText").textContent =
+          `Return '${title}'?`;
+        openDialog("returnModal", triggerEl);
+      }
+
+      function renewLoan(loanId) {
+        const loans = getLoans();
+        const target = loans.find((l) => l.id === loanId);
+        if (!target || target.renewed) return;
+        target.dueOn = addDays(target.dueOn, 7);
+        target.renewed = true;
+        saveLoans(loans);
+        renderLoans();
+        showToast(
+          `Renewed. New due date: ${formatDate(target.dueOn)}.`,
+          "success",
+        );
+      }
+
+      document
+        .getElementById("confirmReturnBtn")
+        .addEventListener("click", () => {
+          if (!loanToReturn) return;
+          const loans = getLoans();
+          const target = loans.find((l) => l.id === loanToReturn.id);
+          if (target) target.returnedOn = getToday();
+          saveLoans(loans);
+          closeDialog(document.getElementById("returnModal"));
+          renderLoans();
+          showToast(`Returned '${loanToReturn.title}'. Thank you!`, "success");
+          loanToReturn = null;
+        });
+
+      document.addEventListener("DOMContentLoaded", async () => {
+        await initStore();
+        renderAppHeader("loans");
+        renderLoans();
+      });
+    </script>
+  </body>
+</html>

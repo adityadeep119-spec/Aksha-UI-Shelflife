@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ShelfLife — Add Book (Librarian)</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap-grid.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/ds/tokens.css" />
+    <link rel="stylesheet" href="/ds/components.css" />
+  </head>
+  <body>
+    <a href="#main-content" class="ak-skip-link">Skip to main content</a>
+    <header id="appHeader"></header>
+
+    <main id="main-content" class="container pb-5" style="max-width: 680px">
+      <h1 style="font-size: var(--ak-font-size-h1); margin-bottom: 16px">
+        Add New Book
+      </h1>
+
+      <div
+        id="errorSummary"
+        class="ak-alert danger"
+        role="alert"
+        tabindex="-1"
+        hidden
+      >
+        <h2 style="margin-top: 0; font-size: 1.1rem">
+          Please fix the following errors:
+        </h2>
+        <ul id="errorSummaryList" style="margin-bottom: 0"></ul>
+      </div>
+
+      <form id="bookForm" novalidate>
+        <div class="ak-field">
+          <label class="ak-label" for="bookTitle">Book title *</label>
+          <input
+            type="text"
+            id="bookTitle"
+            class="ak-textfield"
+            aria-describedby="errTitle"
+            required
+          />
+          <span class="ak-error-msg" id="errTitle"></span>
+        </div>
+
+        <div class="ak-field">
+          <label class="ak-label" for="bookAuthor">Author *</label>
+          <input
+            type="text"
+            id="bookAuthor"
+            class="ak-textfield"
+            aria-describedby="errAuthor"
+            required
+          />
+          <span class="ak-error-msg" id="errAuthor"></span>
+        </div>
+
+        <div class="ak-field">
+          <label class="ak-label" for="bookIsbn">ISBN *</label>
+          <span class="ak-hint" id="hintIsbn"
+            >Enter 10 or 13 digits (numbers only)</span
+          >
+          <input
+            type="text"
+            id="bookIsbn"
+            class="ak-textfield"
+            aria-describedby="hintIsbn errIsbn"
+            required
+          />
+          <span class="ak-error-msg" id="errIsbn"></span>
+        </div>
+
+        <div class="ak-field">
+          <label class="ak-label" for="bookCategory">Category *</label>
+          <select id="bookCategory" class="ak-select">
+            <option value="Software">Software</option>
+            <option value="Design">Design</option>
+            <option value="Accessibility">Accessibility</option>
+            <option value="Computer Science">Computer Science</option>
+            <option value="Fiction">Fiction</option>
+            <option value="Non-Fiction">Non-Fiction</option>
+          </select>
+        </div>
+
+        <div class="ak-field">
+          <label class="ak-label" for="bookCopies">Number of copies *</label>
+          <input
+            type="number"
+            id="bookCopies"
+            class="ak-textfield"
+            value="2"
+            min="1"
+            max="50"
+            aria-describedby="errCopies"
+            required
+          />
+          <span class="ak-error-msg" id="errCopies"></span>
+        </div>
+
+        <div class="d-flex gap-2 mt-4">
+          <button type="submit" class="ak-button primary">Add book</button>
+          <a href="/app/catalog.html" class="ak-button secondary">Cancel</a>
+        </div>
+      </form>
+    </main>
+
+    <script src="/ds/js/toast.js"></script>
+    <script src="/app/js/store.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", async () => {
+        await initStore();
+        renderAppHeader("book-form");
+        if (!requireLibrarian()) return;
+
+        const form = document.getElementById("bookForm");
+        form.addEventListener("submit", (e) => {
+          e.preventDefault();
+
+          const titleEl = document.getElementById("bookTitle");
+          const authorEl = document.getElementById("bookAuthor");
+          const isbnEl = document.getElementById("bookIsbn");
+          const catEl = document.getElementById("bookCategory");
+          const copiesEl = document.getElementById("bookCopies");
+
+          const errors = [];
+
+          // Reset previous errors
+          [titleEl, authorEl, isbnEl, copiesEl].forEach((el) =>
+            el.removeAttribute("aria-invalid"),
+          );
+          ["errTitle", "errAuthor", "errIsbn", "errCopies"].forEach(
+            (id) => (document.getElementById(id).textContent = ""),
+          );
+
+          if (!titleEl.value.trim()) {
+            errors.push({
+              id: "bookTitle",
+              errId: "errTitle",
+              msg: "Enter a book title.",
+            });
+          }
+          if (!authorEl.value.trim()) {
+            errors.push({
+              id: "bookAuthor",
+              errId: "errAuthor",
+              msg: "Enter the author name.",
+            });
+          }
+
+          const cleanIsbn = isbnEl.value.replace(/[^0-9]/g, "");
+          if (cleanIsbn.length !== 10 && cleanIsbn.length !== 13) {
+            errors.push({
+              id: "bookIsbn",
+              errId: "errIsbn",
+              msg: `ISBN must be 10 or 13 digits. You entered ${cleanIsbn.length}.`,
+            });
+          }
+
+          const copies = parseInt(copiesEl.value, 10);
+          if (isNaN(copies) || copies < 1) {
+            errors.push({
+              id: "bookCopies",
+              errId: "errCopies",
+              msg: "Enter at least 1 copy.",
+            });
+          }
+
+          const summary = document.getElementById("errorSummary");
+          const list = document.getElementById("errorSummaryList");
+
+          if (errors.length > 0) {
+            list.innerHTML = errors
+              .map((err) => {
+                document
+                  .getElementById(err.id)
+                  .setAttribute("aria-invalid", "true");
+                document.getElementById(err.errId).textContent = err.msg;
+                return `<li><a href="#${err.id}" onclick="document.getElementById('${err.id}').focus(); return false;">${err.msg}</a></li>`;
+              })
+              .join("");
+            summary.removeAttribute("hidden");
+            summary.focus();
+            return;
+          }
+
+          summary.setAttribute("hidden", "");
+          const books = getBooks();
+          books.unshift({
+            id: "b_" + Date.now(),
+            title: titleEl.value.trim(),
+            author: authorEl.value.trim(),
+            isbn: cleanIsbn,
+            category: catEl.value,
+            copies,
+          });
+          saveBooks(books);
+          form.reset();
+          showToast("Book added to catalog.", "success");
+        });
+      });
+    </script>
+  </body>
+</html>

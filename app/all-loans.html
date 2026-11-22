@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ShelfLife — All Loans (Librarian)</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap-grid.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/ds/tokens.css" />
+    <link rel="stylesheet" href="/ds/components.css" />
+  </head>
+  <body>
+    <a href="#main-content" class="ak-skip-link">Skip to main content</a>
+    <header id="appHeader"></header>
+
+    <main id="main-content" class="container pb-5">
+      <div
+        class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-3"
+      >
+        <h1 style="font-size: var(--ak-font-size-h1); margin: 0">
+          All Active Loans
+        </h1>
+        <div class="ak-field" style="margin: 0; min-width: 220px">
+          <label class="ak-label" for="loanFilter">Filter loans</label>
+          <select id="loanFilter" class="ak-select">
+            <option value="all">All active loans (Overdue first)</option>
+            <option value="overdue">Overdue only</option>
+          </select>
+        </div>
+      </div>
+
+      <p
+        id="loanSummary"
+        role="status"
+        aria-live="polite"
+        style="font-weight: 600; color: var(--ak-color-text-muted)"
+      ></p>
+
+      <div id="allLoansContainer"></div>
+    </main>
+
+    <script src="/ds/js/table-sort.js"></script>
+    <script src="/ds/js/toast.js"></script>
+    <script src="/app/js/store.js"></script>
+    <script>
+      function renderAllLoans() {
+        const books = getBooks();
+        const users = getUsers();
+        const filter = document.getElementById("loanFilter").value;
+
+        const active = getLoans()
+          .filter((l) => !l.returnedOn)
+          .map((l) => {
+            const status = getDueStatus(l.dueOn);
+            const book = books.find((b) => b.id === l.bookId) || {
+              title: "Unknown",
+            };
+            const user = users.find((u) => u.id === l.userId) || {
+              name: "Unknown",
+            };
+            return {
+              ...l,
+              status,
+              bookTitle: book.title,
+              memberName: user.name,
+            };
+          });
+
+        // Sort overdue first (lowest daysLeft first — PRD Section 6 & 17 #6)
+        active.sort((a, b) => a.status.daysLeft - b.status.daysLeft);
+
+        const overdueCount = active.filter((a) => a.status.isOverdue).length;
+        const shown =
+          filter === "overdue"
+            ? active.filter((a) => a.status.isOverdue)
+            : active;
+
+        document.getElementById("loanSummary").textContent =
+          filter === "overdue"
+            ? `Showing ${shown.length} overdue of ${active.length} active loans`
+            : `${active.length} active loans (${overdueCount} overdue listed first)`;
+
+        const container = document.getElementById("allLoansContainer");
+        if (shown.length === 0) {
+          container.innerHTML = `<div class="ak-alert">No active loans match this filter.</div>`;
+          return;
+        }
+
+        container.innerHTML = `
+        <table class="ak-table">
+          <caption>All member loans sorted with overdue items first</caption>
+          <thead>
+            <tr>
+              <th scope="col" data-sort aria-sort="none">Member</th>
+              <th scope="col" data-sort aria-sort="none">Book Title</th>
+              <th scope="col" data-sort aria-sort="none">Checked Out</th>
+              <th scope="col" data-sort aria-sort="none">Due Date</th>
+              <th scope="col" data-sort aria-sort="none">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${shown
+              .map(
+                (item) => `
+              <tr>
+                <td data-label="Member">${item.memberName}</td>
+                <td data-label="Book Title"><strong>${item.bookTitle}</strong></td>
+                <td data-label="Checked Out">${formatDate(item.checkedOutOn)}</td>
+                <td data-label="Due Date">${formatDate(item.dueOn)}</td>
+                <td data-label="Status"><span class="ak-badge ${item.status.tone}">${item.status.text}</span></td>
+              </tr>
+            `,
+              )
+              .join("")}
+          </tbody>
+        </table>
+      `;
+        initTableSort();
+      }
+
+      document.addEventListener("DOMContentLoaded", async () => {
+        await initStore();
+        renderAppHeader("all-loans");
+        if (!requireLibrarian()) return;
+
+        renderAllLoans();
+        document
+          .getElementById("loanFilter")
+          .addEventListener("change", renderAllLoans);
+      });
+    </script>
+  </body>
+</html>

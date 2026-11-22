@@ -1,0 +1,65 @@
+/* ds/tokens.css - Strictly aligned with PRD Sections 9 & 13 */
+:root {
+  /* Contrast-checked colours (WCAG 2.1 AA) */
+  --ak-color-primary: #1D4ED8;        /* 6.7:1 on white */
+  --ak-color-primary-hover: #1E40AF;
+  --ak-color-on-primary: #FFFFFF;
+  
+  --ak-color-bg: #FFFFFF;
+  --ak-color-surface: #F9FAFB;
+  --ak-color-border: #D1D5DB;
+  
+  --ak-color-text: #111827;           /* 17.7:1 on white */
+  --ak-color-text-muted: #4B5563;     /* 7.6:1 on white */
+  
+  /* Semantic Status & Badge Tokens (Section 13) */
+  --ak-color-success: #15803D;
+  --ak-color-success-bg: #DCFCE7;
+  --ak-color-success-text: #166534;   /* 6.5:1 */
+  
+  --ak-color-warning-bg: #FEF9C3;
+  --ak-color-warning-text: #854D0E;   /* 6.4:1 */
+  
+  --ak-color-danger: #B91C1C;
+  --ak-color-danger-bg: #FEE2E2;
+  --ak-color-danger-text: #991B1B;    /* 6.8:1 */
+  
+  --ak-color-info-bg: #DBEAFE;
+  --ak-color-info-text: #1E40AF;
+
+  /* Spacing Scale (Section 9) */
+  --ak-space-1: 4px;
+  --ak-space-2: 8px;
+  --ak-space-3: 12px;
+  --ak-space-4: 16px;
+  --ak-space-6: 24px;
+  --ak-space-8: 32px;
+
+  /* Typography Scale */
+  --ak-font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --ak-font-size-sm: 0.875rem;
+  --ak-font-size-body: 1rem;
+  --ak-font-size-lg: 1.125rem;
+  --ak-font-size-h3: 1.25rem;
+  --ak-font-size-h2: 1.5rem;
+  --ak-font-size-h1: 2rem;
+
+  /* Radius, Shadow & Double Focus Ring (Section 9 & 13) */
+  --ak-radius: 6px;
+  --ak-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  --ak-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+  --ak-focus-ring: 0 0 0 3px #FFFFFF, 0 0 0 5px #1D4ED8;
+}
+
+/* Good-to-have Dark Theme (Section 6 & 10) */
+[data-theme="dark"] {
+  --ak-color-primary: #3B82F6;
+  --ak-color-primary-hover: #60A5FA;
+  --ak-color-on-primary: #FFFFFF;
+  --ak-color-bg: #111827;
+  --ak-color-surface: #1F2937;
+  --ak-color-border: #374151;
+  --ak-color-text: #F9FAFB;
+  --ak-color-text-muted: #9CA3AF;
+  --ak-focus-ring: 0 0 0 3px #111827, 0 0 0 5px #60A5FA;
+}

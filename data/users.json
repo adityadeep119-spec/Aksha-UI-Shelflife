@@ -1,0 +1,7 @@
+[
+  { "id": "u_aditya", "name": "Aditya", "role": "member", "email": "aditya@college.edu", "note": "2nd-year student (keyboard + NVDA user)" },
+  { "id": "u_sneha", "name": "Sneha", "role": "member", "email": "sneha@college.edu", "note": "Frontend engineering student" },
+  { "id": "u_farhan", "name": "Farhan", "role": "member", "email": "farhan@college.edu", "note": "Design student" },
+  { "id": "u_rohan", "name": "Rohan", "role": "member", "email": "rohan@college.edu", "note": "CS undergraduate" },
+  { "id": "u_iyer", "name": "Mrs. Iyer", "role": "librarian", "email": "iyer@college.edu", "note": "Head Librarian" }
+]

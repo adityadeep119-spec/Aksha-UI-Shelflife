@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ShelfLife — Sign In & Demo Controls</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap-grid.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/ds/tokens.css" />
+    <link rel="stylesheet" href="/ds/components.css" />
+  </head>
+  <body>
+    <a href="#main-content" class="ak-skip-link">Skip to main content</a>
+    <header id="appHeader"></header>
+
+    <main id="main-content" class="container pb-5">
+      <h1 style="font-size: var(--ak-font-size-h1); margin-bottom: 8px">
+        Welcome to ShelfLife
+      </h1>
+      <p style="color: var(--ak-color-text-muted); margin-bottom: 24px">
+        Choose a demo role to test the Aksha UI accessible library flow.
+      </p>
+
+      <section aria-labelledby="roles-heading" class="mb-5">
+        <h2 id="roles-heading">1. Choose a Role</h2>
+        <div class="row g-3 mt-1">
+          <div class="col-12 col-md-6">
+            <article class="ak-card">
+              <div>
+                <span class="ak-badge info mb-2">Member</span>
+                <h3>Aditya (Library Member)</h3>
+                <p>
+                  Browse the 30-book catalog, check out books (14-day due date,
+                  max 3 loans), view due-date badges, and return books.
+                </p>
+              </div>
+              <button class="ak-button primary mt-3" id="loginMemberBtn">
+                Continue as Aditya (Member)
+              </button>
+            </article>
+          </div>
+
+          <div class="col-12 col-md-6">
+            <article class="ak-card">
+              <div>
+                <span class="ak-badge success mb-2">Librarian</span>
+                <h3>Mrs. Iyer (Head Librarian)</h3>
+                <p>
+                  Add or edit books with ISBN validation and view all active
+                  library loans sorted with overdue items first.
+                </p>
+              </div>
+              <button class="ak-button primary mt-3" id="loginLibrarianBtn">
+                Continue as Mrs. Iyer (Librarian)
+              </button>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section aria-labelledby="demo-heading">
+        <h2 id="demo-heading">2. Demo & Evaluation Controls</h2>
+        <div class="row g-3 mt-1">
+          <div class="col-12 col-md-6">
+            <div class="ak-card">
+              <div>
+                <h3>Simulate Date</h3>
+                <p style="color: var(--ak-color-text-muted)">
+                  Override "today" to test due-soon and overdue badges (e.g.,
+                  set +15 days ahead).
+                </p>
+                <div class="ak-field">
+                  <label class="ak-label" for="simDateInput"
+                    >Simulated date</label
+                  >
+                  <input type="date" id="simDateInput" class="ak-textfield" />
+                </div>
+              </div>
+              <div class="d-flex gap-2 flex-wrap">
+                <button
+                  type="button"
+                  class="ak-button primary sm"
+                  id="applyDateBtn"
+                >
+                  Apply date
+                </button>
+                <button
+                  type="button"
+                  class="ak-button secondary sm"
+                  id="plus15Btn"
+                >
+                  Jump +15 days
+                </button>
+                <button
+                  type="button"
+                  class="ak-button secondary sm"
+                  id="clearDateBtn"
+                >
+                  Use real today
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 col-md-6">
+            <div class="ak-card">
+              <div>
+                <h3>Reset Demo Data</h3>
+                <p style="color: var(--ak-color-text-muted)">
+                  Restore all 30 books from <code>data/books.json</code>, sample
+                  loans, and clear simulated dates.
+                </p>
+              </div>
+              <button
+                type="button"
+                class="ak-button danger mt-3"
+                id="resetDataBtn"
+              >
+                Reset demo data
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="/ds/js/toast.js"></script>
+    <script src="/app/js/store.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", async () => {
+        await initStore();
+        renderAppHeader("login");
+
+        const simInput = document.getElementById("simDateInput");
+        simInput.value = getToday();
+
+        document
+          .getElementById("loginMemberBtn")
+          .addEventListener("click", () => {
+            const aditya = getUsers().find((u) => u.id === "u_aditya");
+            setSession(aditya);
+            window.location.href = "/app/catalog.html";
+          });
+
+        document
+          .getElementById("loginLibrarianBtn")
+          .addEventListener("click", () => {
+            const iyer = getUsers().find((u) => u.id === "u_iyer");
+            setSession(iyer);
+            window.location.href = "/app/all-loans.html";
+          });
+
+        document
+          .getElementById("applyDateBtn")
+          .addEventListener("click", () => {
+            if (!simInput.value) return;
+            localStorage.setItem(SL_KEYS.SIM_DATE, simInput.value);
+            renderAppHeader("login");
+            showToast(
+              `Simulated date set to ${formatDate(simInput.value)}`,
+              "success",
+            );
+          });
+
+        document.getElementById("plus15Btn").addEventListener("click", () => {
+          const next = addDays(getToday(), 15);
+          simInput.value = next;
+          localStorage.setItem(SL_KEYS.SIM_DATE, next);
+          renderAppHeader("login");
+          showToast(`Jumped +15 days to ${formatDate(next)}`, "success");
+        });
+
+        document
+          .getElementById("clearDateBtn")
+          .addEventListener("click", () => {
+            localStorage.removeItem(SL_KEYS.SIM_DATE);
+            simInput.value = getRealToday();
+            renderAppHeader("login");
+            showToast("Returned to real today", "info");
+          });
+
+        document
+          .getElementById("resetDataBtn")
+          .addEventListener("click", async () => {
+            await resetDemoData();
+            simInput.value = getRealToday();
+            renderAppHeader("login");
+            showToast("Demo data reset to 30 books & sample loans", "success");
+          });
+      });
+    </script>
+  </body>
+</html>

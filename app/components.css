@@ -1,0 +1,27 @@
+.ak-button {
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.2s ease;
+}
+
+.ak-button.primary {
+    background-color: var(--ak-color-primary, #2563eb);
+    color: var(--ak-color-on-primary, #ffffff);
+}
+
+.ak-button.primary:hover {
+    background-color: #1d4ed8;
+}
+
+.ak-button.secondary {
+    background-color: #e5e7eb;
+    color: var(--ak-color-text, #111827);
+}
+
+.ak-button.secondary:hover {
+    background-color: #d1d5db;
+}

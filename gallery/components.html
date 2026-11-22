@@ -1,0 +1,489 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aksha UI — 10 Accessible Components</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap-grid.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/ds/tokens.css" />
+    <link rel="stylesheet" href="/ds/components.css" />
+    <style>
+      .doc-section {
+        border-bottom: 1px solid var(--ak-color-border);
+        padding: 24px 0;
+      }
+      .snippet-box {
+        background: #111827;
+        color: #f9fafb;
+        padding: 12px;
+        border-radius: 6px;
+        font-family: monospace;
+        font-size: 13px;
+        overflow-x: auto;
+        margin-top: 8px;
+      }
+      .do-dont {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        margin-top: 12px;
+      }
+      @media (max-width: 576px) {
+        .do-dont {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <a href="#main-content" class="ak-skip-link">Skip to main content</a>
+
+    <header
+      class="container py-4 border-bottom mb-4 d-flex justify-content-between align-items-center flex-wrap gap-2"
+    >
+      <div>
+        <h1 style="margin: 0; font-size: var(--ak-font-size-h2)">
+          Aksha UI — 10 Components Documentation
+        </h1>
+        <p style="margin: 0; color: var(--ak-color-text-muted)">
+          Live demos, states, keyboard behavior, ARIA notes, Do/Don't, and
+          copyable snippets
+        </p>
+      </div>
+      <nav aria-label="Gallery Navigation" class="d-flex gap-2">
+        <a href="/gallery/index.html" class="ak-button secondary"
+          >Gallery Home</a
+        >
+        <a href="/gallery/tokens.html" class="ak-button secondary"
+          >Design Tokens</a
+        >
+        <a
+          href="/gallery/components.html"
+          class="ak-button primary"
+          aria-current="page"
+          >10 Components</a
+        >
+        <a href="/app/index.html" class="ak-button secondary"
+          >Launch ShelfLife App →</a
+        >
+      </nav>
+    </header>
+
+    <main id="main-content" class="container pb-5">
+      <!-- 1. BUTTON -->
+      <section id="comp-button" class="doc-section">
+        <h2>1. Button (<code>.ak-button</code>)</h2>
+        <p>
+          <strong>Keyboard & ARIA:</strong> <code>Enter</code> /
+          <code>Space</code> activates. Icon-only buttons require
+          <code>aria-label</code>. Start labels with a verb ("Check out",
+          "Return book").
+        </p>
+        <div class="d-flex gap-2 flex-wrap my-3">
+          <button class="ak-button primary">Check out</button>
+          <button class="ak-button secondary">Cancel</button>
+          <button class="ak-button danger">Delete book</button>
+          <button class="ak-button primary" disabled>Disabled state</button>
+          <button class="ak-button secondary" aria-label="Search catalog">
+            🔍
+          </button>
+        </div>
+        <div class="do-dont">
+          <div class="ak-alert success">
+            <strong>Do:</strong> Start with an action verb and include
+            <code>aria-label</code> on icon buttons.
+          </div>
+          <div class="ak-alert danger">
+            <strong>Don't:</strong> Remove focus outlines or use vague text like
+            "Click here".
+          </div>
+        </div>
+        <div class="snippet-box" id="snip-btn">
+          &lt;button class="ak-button primary"&gt;Check out&lt;/button&gt;
+        </div>
+        <button
+          class="ak-button secondary sm mt-2"
+          onclick="copySnippet('snip-btn', this)"
+        >
+          Copy Snippet
+        </button>
+      </section>
+
+      <!-- 2. TEXTFIELD -->
+      <section id="comp-textfield" class="doc-section">
+        <h2>2. TextField (<code>.ak-textfield</code>)</h2>
+        <p>
+          <strong>Keyboard & ARIA:</strong> Uses explicit
+          <code>&lt;label for&gt;</code>, links hint and error via
+          <code>aria-describedby</code>, and sets
+          <code>aria-invalid="true"</code> on error.
+        </p>
+        <div class="row g-3 my-2">
+          <div class="col-12 col-md-6">
+            <div class="ak-field">
+              <label class="ak-label" for="demo-search">Search books</label>
+              <span class="ak-hint" id="demo-search-hint"
+                >Search by book title, author, or ISBN</span
+              >
+              <input
+                class="ak-textfield"
+                id="demo-search"
+                type="search"
+                aria-describedby="demo-search-hint"
+                placeholder="e.g. Clean Code"
+              />
+            </div>
+          </div>
+          <div class="col-12 col-md-6">
+            <div class="ak-field">
+              <label class="ak-label" for="demo-isbn">ISBN (Error State)</label>
+              <span class="ak-hint" id="demo-isbn-hint"
+                >Enter a 10 or 13 digit ISBN</span
+              >
+              <input
+                class="ak-textfield"
+                id="demo-isbn"
+                type="text"
+                value="978013235"
+                aria-invalid="true"
+                aria-describedby="demo-isbn-hint demo-isbn-err"
+              />
+              <span class="ak-error-msg" id="demo-isbn-err"
+                >ISBN must be 10 or 13 digits. You entered 9.</span
+              >
+            </div>
+          </div>
+        </div>
+        <div class="snippet-box" id="snip-tf">
+          &lt;div class="ak-field"&gt; &lt;label class="ak-label"
+          for="book-title"&gt;Book title&lt;/label&gt; &lt;input
+          class="ak-textfield" id="book-title" type="text" required&gt;
+          &lt;/div&gt;
+        </div>
+        <button
+          class="ak-button secondary sm mt-2"
+          onclick="copySnippet('snip-tf', this)"
+        >
+          Copy Snippet
+        </button>
+      </section>
+
+      <!-- 3. SELECT -->
+      <section id="comp-select" class="doc-section">
+        <h2>3. Select (<code>.ak-select</code>)</h2>
+        <p>
+          <strong>Keyboard & ARIA:</strong> Native
+          <code>&lt;select&gt;</code> with <code>&lt;label for&gt;</code>;
+          supports Up/Down arrows and Space to expand.
+        </p>
+        <div class="ak-field" style="max-width: 320px">
+          <label class="ak-label" for="demo-cat">Filter by category</label>
+          <select class="ak-select" id="demo-cat">
+            <option value="all">All categories</option>
+            <option value="Software">Software</option>
+            <option value="Fiction">Fiction</option>
+          </select>
+        </div>
+        <div class="snippet-box" id="snip-sel">
+          &lt;label class="ak-label" for="cat"&gt;Category&lt;/label&gt;
+          &lt;select class="ak-select"
+          id="cat"&gt;&lt;option&gt;Software&lt;/option&gt;&lt;/select&gt;
+        </div>
+        <button
+          class="ak-button secondary sm mt-2"
+          onclick="copySnippet('snip-sel', this)"
+        >
+          Copy Snippet
+        </button>
+      </section>
+
+      <!-- 4. CHECKBOX -->
+      <section id="comp-checkbox" class="doc-section">
+        <h2>4. Checkbox (<code>.ak-checkbox</code>)</h2>
+        <p>
+          <strong>Keyboard & ARIA:</strong> <code>Space</code> toggles checked
+          state. Native checkbox paired with explicit label.
+        </p>
+        <div>
+          <label class="ak-checkbox-wrapper">
+            <input type="checkbox" class="ak-checkbox" checked /> Available
+            copies only
+          </label>
+        </div>
+        <div class="snippet-box" id="snip-cb">
+          &lt;label class="ak-checkbox-wrapper"&gt; &lt;input type="checkbox"
+          class="ak-checkbox"&gt; Available copies only &lt;/label&gt;
+        </div>
+        <button
+          class="ak-button secondary sm mt-2"
+          onclick="copySnippet('snip-cb', this)"
+        >
+          Copy Snippet
+        </button>
+      </section>
+
+      <!-- 5. BADGE -->
+      <section id="comp-badge" class="doc-section">
+        <h2>5. Badge (<code>.ak-badge</code>)</h2>
+        <p>
+          <strong>Accessibility Rule:</strong> Never communicate status by
+          colour alone—always include descriptive text ("Due in 3 days",
+          "Overdue by 2 days").
+        </p>
+        <div class="d-flex gap-2 flex-wrap my-3">
+          <span class="ak-badge success">Available (2 copies)</span>
+          <span class="ak-badge info">Due in 10 days</span>
+          <span class="ak-badge warning">Due today</span>
+          <span class="ak-badge danger">Overdue by 2 days</span>
+        </div>
+        <div class="snippet-box" id="snip-bdg">
+          &lt;span class="ak-badge danger"&gt;Overdue by 2 days&lt;/span&gt;
+        </div>
+        <button
+          class="ak-button secondary sm mt-2"
+          onclick="copySnippet('snip-bdg', this)"
+        >
+          Copy Snippet
+        </button>
+      </section>
+
+      <!-- 6. ALERT / TOAST -->
+      <section id="comp-alert" class="doc-section">
+        <h2>
+          6. Alert & Toast (<code>.ak-alert</code> / <code>showToast()</code>)
+        </h2>
+        <p>
+          <strong>Keyboard & ARIA:</strong> Uses
+          <code>role="status"</code> (polite) for confirmations and
+          <code>role="alert"</code> for errors.
+        </p>
+        <div class="ak-alert warning" role="alert">
+          You can borrow up to 3 books. Return one first.
+        </div>
+        <button
+          class="ak-button primary"
+          onclick="showToast('Checked out. Due on 28 Aug 2026.', 'success')"
+        >
+          Trigger Live Toast
+        </button>
+        <div class="snippet-box" id="snip-tst">
+          showToast('Checked out. Due on 28 Aug 2026.', 'success');
+        </div>
+        <button
+          class="ak-button secondary sm mt-2"
+          onclick="copySnippet('snip-tst', this)"
+        >
+          Copy Snippet
+        </button>
+      </section>
+
+      <!-- 7. MODAL DIALOG -->
+      <section id="comp-dialog" class="doc-section">
+        <h2>7. Modal Dialog (<code>.ak-dialog</code>)</h2>
+        <p>
+          <strong>Keyboard & ARIA:</strong> <code>role="dialog"</code>,
+          <code>aria-modal="true"</code>, <code>aria-labelledby</code>. Traps
+          <code>Tab</code> focus inside, closes on <code>Esc</code>, and returns
+          focus to the trigger button.
+        </p>
+        <button class="ak-button primary" data-dialog-target="bookModal">
+          Open Book Details Dialog
+        </button>
+
+        <div
+          id="bookModal"
+          class="ak-dialog"
+          role="dialog"
+          aria-labelledby="dialogTitle"
+          hidden
+        >
+          <h3 id="dialogTitle">Clean Code</h3>
+          <p>
+            <strong>Author:</strong> Robert C. Martin |
+            <strong>ISBN:</strong> 9780132350884
+          </p>
+          <p><span class="ak-badge success">Available</span></p>
+          <div class="d-flex gap-2 mt-3">
+            <button class="ak-button secondary" data-dialog-close>Close</button>
+            <button
+              class="ak-button primary"
+              data-dialog-close
+              onclick="showToast('Checked out. Due on 28 Aug 2026.', 'success')"
+            >
+              Check out
+            </button>
+          </div>
+        </div>
+        <div class="snippet-box" id="snip-dlg">
+          &lt;div id="myDialog" class="ak-dialog" role="dialog"
+          aria-labelledby="dlgTitle" hidden&gt; &lt;h2 id="dlgTitle"&gt;Confirm
+          Action&lt;/h2&gt; &lt;button class="ak-button secondary"
+          data-dialog-close&gt;Close&lt;/button&gt; &lt;/div&gt;
+        </div>
+        <button
+          class="ak-button secondary sm mt-2"
+          onclick="copySnippet('snip-dlg', this)"
+        >
+          Copy Snippet
+        </button>
+      </section>
+
+      <!-- 8. CARD -->
+      <section id="comp-card" class="doc-section">
+        <h2>8. Card (<code>.ak-card</code>)</h2>
+        <p>
+          <strong>ARIA Note:</strong> Contains a semantic heading and explicit
+          action button; avoids wrapping the entire card in a link.
+        </p>
+        <div style="max-width: 340px">
+          <article class="ak-card">
+            <div>
+              <span class="ak-badge success mb-2">Available</span>
+              <h3>Designing Data-Intensive Applications</h3>
+              <p style="color: var(--ak-color-text-muted)">
+                Martin Kleppmann • Software
+              </p>
+            </div>
+            <button class="ak-button secondary mt-2">View details</button>
+          </article>
+        </div>
+        <div class="snippet-box" id="snip-crd">
+          &lt;article class="ak-card"&gt; &lt;h3&gt;Clean Code&lt;/h3&gt;
+          &lt;button class="ak-button primary"&gt;View details&lt;/button&gt;
+          &lt;/article&gt;
+        </div>
+        <button
+          class="ak-button secondary sm mt-2"
+          onclick="copySnippet('snip-crd', this)"
+        >
+          Copy Snippet
+        </button>
+      </section>
+
+      <!-- 9. DATA TABLE -->
+      <section id="comp-table" class="doc-section">
+        <h2>9. Sortable Data Table (<code>.ak-table</code>)</h2>
+        <p>
+          <strong>Keyboard & ARIA:</strong> Includes
+          <code>&lt;caption&gt;</code>, <code>&lt;th scope="col"&gt;</code>, and
+          <code>aria-sort</code>. Focus any header and press
+          <code>Enter</code> or <code>Space</code> to sort.
+        </p>
+        <table class="ak-table">
+          <caption>
+            Sample Library Catalog (Click or press Enter on headers to sort)
+          </caption>
+          <thead>
+            <tr>
+              <th scope="col" data-sort aria-sort="none">Title</th>
+              <th scope="col" data-sort aria-sort="none">Author</th>
+              <th scope="col" data-sort aria-sort="none">Year</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td data-label="Title">Clean Code</td>
+              <td data-label="Author">Robert C. Martin</td>
+              <td data-label="Year">2008</td>
+            </tr>
+            <tr>
+              <td data-label="Title">The Pragmatic Programmer</td>
+              <td data-label="Author">Andrew Hunt</td>
+              <td data-label="Year">1999</td>
+            </tr>
+            <tr>
+              <td data-label="Title">Designing Data-Intensive Applications</td>
+              <td data-label="Author">Martin Kleppmann</td>
+              <td data-label="Year">2017</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="snippet-box" id="snip-tbl">
+          &lt;table class="ak-table"&gt; &lt;caption&gt;Book
+          Loans&lt;/caption&gt; &lt;thead&gt;&lt;tr&gt;&lt;th scope="col"
+          data-sort
+          aria-sort="none"&gt;Title&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
+          &lt;/table&gt;
+        </div>
+        <button
+          class="ak-button secondary sm mt-2"
+          onclick="copySnippet('snip-tbl', this)"
+        >
+          Copy Snippet
+        </button>
+      </section>
+
+      <!-- 10. TABS -->
+      <section id="comp-tabs" class="doc-section">
+        <h2>10. Accessible Tabs (<code>.ak-tabs</code>)</h2>
+        <p>
+          <strong>Keyboard & ARIA:</strong> Uses <code>role="tablist"</code>,
+          <code>role="tab"</code>, <code>role="tabpanel"</code>,
+          <code>aria-selected</code>, and roving <code>tabindex</code>. Use
+          Left/Right arrows and Home/End keys.
+        </p>
+        <div class="ak-tabs">
+          <div role="tablist" aria-label="Loan Categories">
+            <button
+              role="tab"
+              aria-selected="true"
+              aria-controls="panel-1"
+              id="tab-1"
+              tabindex="0"
+            >
+              Current Loans
+            </button>
+            <button
+              role="tab"
+              aria-selected="false"
+              aria-controls="panel-2"
+              id="tab-2"
+              tabindex="-1"
+            >
+              Loan History
+            </button>
+          </div>
+          <div id="panel-1" role="tabpanel" aria-labelledby="tab-1">
+            <p>Showing active loans with due-date badges.</p>
+          </div>
+          <div id="panel-2" role="tabpanel" aria-labelledby="tab-2" hidden>
+            <p>Showing previously returned books.</p>
+          </div>
+        </div>
+        <div class="snippet-box" id="snip-tbs">
+          &lt;div class="ak-tabs"&gt; &lt;div role="tablist"
+          aria-label="Sections"&gt; &lt;button role="tab" aria-selected="true"
+          aria-controls="p1" id="t1" tabindex="0"&gt;Tab 1&lt;/button&gt;
+          &lt;/div&gt; &lt;div id="p1" role="tabpanel"
+          aria-labelledby="t1"&gt;Content&lt;/div&gt; &lt;/div&gt;
+        </div>
+        <button
+          class="ak-button secondary sm mt-2"
+          onclick="copySnippet('snip-tbs', this)"
+        >
+          Copy Snippet
+        </button>
+      </section>
+    </main>
+
+    <script src="/ds/js/dialog.js"></script>
+    <script src="/ds/js/tabs.js"></script>
+    <script src="/ds/js/toast.js"></script>
+    <script src="/ds/js/table-sort.js"></script>
+    <script>
+      function copySnippet(id, btn) {
+        const text = document.getElementById(id).textContent;
+        navigator.clipboard.writeText(text);
+        const original = btn.textContent;
+        btn.textContent = "Copied ✓";
+        showToast("Copied ✓ Snippet copied to clipboard", "success");
+        setTimeout(() => {
+          btn.textContent = original;
+        }, 2000);
+      }
+    </script>
+  </body>
+</html>
